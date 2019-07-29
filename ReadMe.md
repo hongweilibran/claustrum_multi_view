@@ -1,1 +1,1 @@
-**Claustrum segmentation using multi-view networks ensembles
+##Claustrum segmentation using multi-view networks ensembles
