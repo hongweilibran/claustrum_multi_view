@@ -9,7 +9,10 @@ We provide pre-trained models to directly perform inference for your new dataset
 <br />
 There are several pre-processing steps you will need to follow before you feed your data to our pre-trained model: <br /> <br />
 a) Resampling the MR scans to 1 mm^3; We provide the python codes for resampling in the repository. <br />
-b) Skull-stripping; There are two options: i) [ROBEX](https://www.nitrc.org/projects/robex), and ii) FSL-BET. All works well. We provide simple bash files to use FSL-BET <br />
-c) Image denoising using an adaptive nonlocal means filter for 3D MRI ([ANLM](https://sites.google.com/site/pierrickcoupe/softwares/denoising-for-medical-imaging/mri-denoising)). Default setting was used in our work.  <br /> <br />
+b) Skull-stripping; There are two options: i) [ROBEX](https://www.nitrc.org/projects/robex), and ii) FSL-BET. All works well. We provide a simple bash file to use FSL-BET to deal with a couple of images <br />
+c) Image denoising using an adaptive nonlocal means filter for 3D MRI ([ANLM](https://sites.google.com/site/pierrickcoupe/softwares/denoising-for-medical-imaging/mri-denoising)). The default setting was used in our work.  <br /> <br />
 
-After these steps, you could play around with the test codes. 
+After these steps, you could play around with the test codes.  <br />
+
+Feel free to ask me any questions. 
+
