@@ -1,5 +1,10 @@
+
 ### This is a tutorial on Automatic Segmentation of the claustrum in MR images using deep learning. 
+
+# test your dataset
+
 <br />
+
 We provide pre-trained models to directly perform inference for your new dataset. Here is a [simple demo](https://drive.google.com/file/d/1b0XS8LjRM-rZMPOL8qM6voG-A5jcdUgK/view?usp=sharing) to test on new dataset. The codes can run without GPUs.  The detailed instructions are in **ReadMe** inside. Please have a look at it. <br /> 
 <br />
 There are several pre-processing steps you will need to follow before you feed your data to our pre-trained model: <br /> <br />
