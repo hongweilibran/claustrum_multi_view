@@ -13,8 +13,7 @@ a) Resampling the MR scans to 1 mm^3; We provide the python codes for resampling
 b) Skull-stripping; There are two options: i) [ROBEX](https://www.nitrc.org/projects/robex), and ii) FSL-BET. All works well. We provide a simple bash file to use FSL-BET to deal with a couple of images in a loop. <br />
 c) Image denoising using an adaptive nonlocal means filter for 3D MRI ([ANLM](https://sites.google.com/site/pierrickcoupe/softwares/denoising-for-medical-imaging/mri-denoising)). The default setting was used in our work.  <br /> <br />
 
-After these steps, you could play around with the test codes.  <br />
+After these steps, you could play around with the test codes. Feel free to ask [me](hongwei.li@tum.de) any questions.  <br />
 
-Feel free to ask [me](hongwei.li@tum.de) any questions. 
 
 ### How to train your own models
