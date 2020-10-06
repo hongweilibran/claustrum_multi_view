@@ -15,5 +15,6 @@ c) Image denoising using an adaptive nonlocal means filter for 3D MRI ([ANLM](ht
 
 After these steps, you could play around with the test codes.  <br />
 
-Feel free to ask me any questions. 
+Feel free to ask [me](hongwei.li@tum.de) any questions. 
 
+### How to train your own models
