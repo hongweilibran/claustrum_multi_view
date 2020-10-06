@@ -10,7 +10,7 @@ Here is a [simple demo](https://drive.google.com/file/d/1b0XS8LjRM-rZMPOL8qM6voG
 <br />
 There are several pre-processing steps you will need to follow before you feed your data to our pre-trained model: <br /> <br />
 a) Resampling the MR scans to 1 mm^3; We provide the python codes for resampling in the repository. <br />
-b) Skull-stripping; There are two options: i) [ROBEX](https://www.nitrc.org/projects/robex), and ii) FSL-BET. All works well. We provide a simple bash file to use FSL-BET to deal with a couple of images in a loop. <br />
+b) Skull-stripping; We tried two options: i) [ROBEX](https://www.nitrc.org/projects/robex), or ii) FSL-BET. All works well. We provide a simple bash file to use FSL-BET to deal with a couple of images in a loop. <br />
 c) Image denoising using an adaptive nonlocal means filter for 3D MRI ([ANLM, in Matlab](https://sites.google.com/site/pierrickcoupe/softwares/denoising-for-medical-imaging/mri-denoising)). Unfortunately we did not find python version of this step. The default setting in Matlab was used in our work.  <br /> <br />
 
 After these steps, you could play around with the test codes. Feel free to ask [me](hongwei.li@tum.de) any questions.  <br />
