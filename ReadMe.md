@@ -1,5 +1,5 @@
 
-# This is a tutorial on Automatic Segmentation of the claustrum in MR images using deep learning. 
+## A tutorial on automatic segmentation of the claustrum in MR images using deep learning. 
 
 ### Test your dataset
 
