@@ -23,5 +23,5 @@ b) Training.
 
 
 ### Disclaimer on Datasets
-======================
+
 We do not host or distribute [ABIDE](http://fcon_1000.projects.nitrc.org/indi/abide/) or claim that you have license to use the dataset. It is your responsibility to determine whether you have permission to use the dataset under the dataset's license.
