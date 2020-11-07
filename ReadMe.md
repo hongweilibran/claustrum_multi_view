@@ -22,7 +22,7 @@ After these three steps, you could play around with the test codes. Feel free to
 
 a) Data preparation. Resampling is not necessary if you want to work on the resolution you prefer. <br />
 b) Training.
-
+(continually updated...)
 
 ### Disclaimer on Datasets
 
