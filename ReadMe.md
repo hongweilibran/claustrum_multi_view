@@ -1,7 +1,9 @@
 
 ## A tutorial on automatic segmentation of the claustrum in MR images using deep learning. 
+![Demo](./claustrum_seg_results.png)
 
 ### How to directly apply it on your own dataset with our pre-trained models?
+
 
 <br />
 
