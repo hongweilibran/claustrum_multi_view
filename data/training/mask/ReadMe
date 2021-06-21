@@ -1,0 +1,5 @@
+data/training/mask
+
+In this folder, you can save your masks/segmentations corresponding to MRI scans in data/training/image for training a model. Please regard that images and masks should be in the same order, i. e. the first training image should be related to the first training mask and so on.
+
+When you have filled in some masks you should remove this ReadMe file for training.

@@ -1,0 +1,5 @@
+data/training/image
+
+In this folder you can save your MRI scans for training a model. You can use your own scans or feel free to register for the developing Human Connectome Project (http://www.developingconnectome.org/data-release/second-data-release/information-registration-and-download/) to request data.
+
+When you have filled in some scans you should remove this ReadMe file for training.
