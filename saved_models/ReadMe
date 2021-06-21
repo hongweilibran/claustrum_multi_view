@@ -1,0 +1,3 @@
+saved_models
+
+In this folder, the training code will automatically save all trained models depending on your given hyperparameters and the files in data/taining/image and data/training/mask.
