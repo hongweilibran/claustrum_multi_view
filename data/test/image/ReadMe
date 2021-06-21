@@ -1,5 +1,5 @@
 data/test/image
 
-In this folder, you can save your MRI scans for testing a model. You can use your own scans or feel free to register for the developing Human Connectome Project (http://www.developingconnectome.org/data-release/second-data-release/information-registration-and-download/) to request data.
+In this folder, you can store your MRI scans for segmentation using a pre-trained model. You can use your own scans or feel free to register for the developing Human Connectome Project (http://www.developingconnectome.org/data-release/second-data-release/information-registration-and-download/) to request data.
 
 When you have filled in some scans you should remove this ReadMe file for running the test code.
