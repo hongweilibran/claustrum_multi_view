@@ -1,0 +1,3 @@
+scores
+
+This folder will store csv-logger files which record the loss of each epoch when you train a model with the training code.
