@@ -15,6 +15,10 @@ from PIL import Image
 # for data augmentation
 import imgaug as ia
 import imgaug.augmenters as iaa
+# for plotting the loss
+import pandas as pd
+import matplotlib.pyplot as plt
+plt.rcParams.update({'font.size': 14})
 
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
@@ -248,6 +252,19 @@ def get_unet(img_shape = None, first5=False):
         return model
 
 
+## to plot the training loss
+def plot_loss(name_exp, text='Training loss'):
+    table_csv_path = os.path.join('scores/model'+str(name_exp)+'_log.csv')
+    model = pd.read_csv(table_csv_path)
+    fig, ax = plt.subplots()
+    y1 = model.loss
+    ax.plot(y1, color='darkblue', label='TL Training Loss')
+    ax.set(xlabel='Epoch', ylabel='', title=text)
+    ax.grid()
+    #plt.show()
+    plt.savefig('plots/loss_'+str(name_exp)+'.svg', bbox_inches='tight')
+
+
 ## data preparation and training of the model
 def prep_train(csv_logger): 
     global model
@@ -319,3 +336,4 @@ if __name__ == '__main__':
     model.summary()
 
     prep_train(csv_logger)
+    plot_loss(name_exp=name_exp)
