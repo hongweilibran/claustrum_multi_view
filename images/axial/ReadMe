@@ -1,0 +1,3 @@
+images/axial
+
+This folder will accumulate presumably axial slices of training or test scans while data preparation. Thus, you can visually control if the orientation of the scans is detected accurately by the code. You can simply check if all images in this folder show axial views.

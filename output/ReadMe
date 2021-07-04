@@ -1,0 +1,3 @@
+output
+
+In this folder, the test code will automatically save all predicted segmentations corresponding to the images in data/test/image.
