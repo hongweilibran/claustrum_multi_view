@@ -90,6 +90,9 @@ def preparation (full_path, pat_list):
         #read data, please name the segmentation mask with the keword 'seg'
         pat_file_name = glob.glob(os.path.join(full_path, pat, '*T2w.nii.gz'))
         seg_file_name = glob.glob(os.path.join(full_path, pat, '*seg*')) 
+        if len(pat_file_name)==0 or len(seg_file_name)==0:
+            print('ignoring', pat)
+            continue
         image_array = sitk.GetArrayFromImage(sitk.ReadImage(pat_file_name[0]))  
         mask_array = sitk.GetArrayFromImage(sitk.ReadImage(seg_file_name[0]))  
 
@@ -295,7 +298,7 @@ img_shape = (200, 200, 1)
 
 
 ### hints to train a new model:
-# change the model_number for each new model to prevet overwriting the previous one
+# change the name_exp for each new model to prevet overwriting the previous one
 # you might adapt the loaded model weights for transfer learning
 
 if __name__ == '__main__':
@@ -316,7 +319,7 @@ if __name__ == '__main__':
     model.load_weights(pretrained_model)
     
     ## to save the training loss in a csv file
-    logger_name = os.path.join('scores/'+'model'+str(model_number)+'_log.csv')
+    logger_name = os.path.join('scores/'+'model'+str(args.name_exp)+'_log.csv')
     csv_logger = CSVLogger(logger_name, append=True, separator=',')
 
     model.summary()
