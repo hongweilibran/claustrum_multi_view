@@ -2,6 +2,7 @@
 # the hyperparameters are defined at the end of this file
 
 import os
+import argparse
 os.environ['KERAS_BACKEND'] = 'tensorflow'
 import numpy as np
 import SimpleITK as sitk
@@ -15,7 +16,7 @@ from PIL import Image
 # for data augmentation
 import imgaug as ia
 import imgaug.augmenters as iaa
-
+import glob
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -66,7 +67,7 @@ def inverse_orient(orient_):
         inv_orient = (2, 1, 0)
     return inv_orient
 
-## this is to check if the orientation of your images is right or not. Please check /images/coronal and /images/axial
+## this is simply to check if the orientation of your images is right or not. Please check /images/coronal and /images/axial
 def check_orient (array, direction, pat_count):
     for ss in range(0, np.shape(array)[0], 20):
         slice_ = 255*(array[ss] - np.min(array[ss]))/(np.max(array[ss]) - np.min(array[ss]))
@@ -81,58 +82,60 @@ def concatenate_arrays (all_array_1, array_2):
         all_array_1 = np.concatenate(([all_array_1 , array_2 ]), axis=0)
     return all_array_1
 
-def preparation (full_path, pat_list, dataset_name, data_type): 
-    dataset_con = None
-    pat_count = 0
-    for pat in sorted(pat_list):
+def preparation (full_path, pat_list): 
+    image_con = None
+    mask_con = None
+    for pat_count, pat in enumerate(sorted(pat_list)):
         print('preparation of subject: ', pat_count)
-        #read data
-        pat_file_name = os.path.join(full_path, pat)
-        image_array = sitk.GetArrayFromImage(sitk.ReadImage(pat_file_name))  
-        
-        if data_type=='image':         
-            # z-score normalization
-            brain_mask_T2 = np.zeros(np.shape(image_array), dtype = 'float32')
-            brain_mask_T2[image_array >=thresh] = 1
-            brain_mask_T2[image_array < thresh] = 0
-            for iii in range(np.shape(image_array)[0]):
-                brain_mask_T2[iii,:,:] = scipy.ndimage.morphology.binary_fill_holes(brain_mask_T2[iii,:,:])  #fill the holes inside br
-            image_array = image_array - np.mean(image_array[brain_mask_T2 == 1])
-            image_array /= np.std(image_array[brain_mask_T2 == 1])
+        #read data, please name the segmentation mask with the keword 'seg'
+        pat_file_name = glob.glob(os.path.join(full_path, pat, '*T2w.nii.gz'))
+        seg_file_name = glob.glob(os.path.join(full_path, pat, '*seg*')) 
+        image_array = sitk.GetArrayFromImage(sitk.ReadImage(pat_file_name[0]))  
+        mask_array = sitk.GetArrayFromImage(sitk.ReadImage(seg_file_name[0]))  
 
-        elif data_type=='mask':              
-            # label adaption: label 1 and 2 become label 1
-            brain_mask_T2 = np.zeros(np.shape(image_array), dtype = 'float32')
-            brain_mask_T2[image_array >=1] = 1
-            brain_mask_T2[image_array < 1] = 0
-            for iii in range(np.shape(image_array)[0]):
-                brain_mask_T2[iii,:,:] = scipy.ndimage.morphology.binary_fill_holes(brain_mask_T2[iii,:,:])  #fill the holes inside br
-            image_array = brain_mask_T2
+        # z-score normalization of the image in a scan level
+        brain_mask_T2 = np.zeros(np.shape(image_array), dtype = 'float32')
+        brain_mask_T2[image_array >=thresh] = 1
+        brain_mask_T2[image_array < thresh] = 0
+        for iii in range(np.shape(image_array)[0]):
+            brain_mask_T2[iii,:,:] = scipy.ndimage.morphology.binary_fill_holes(brain_mask_T2[iii,:,:])  #fill the holes inside br
+        image_array = image_array - np.mean(image_array[brain_mask_T2 == 1])
+        image_array /= np.std(image_array[brain_mask_T2 == 1])
+
+        # label adaption: label 1 and 2 become label 1
+        brain_mask_T2 = np.zeros(np.shape(mask_array), dtype = 'float32')
+        brain_mask_T2[mask_array >=1] = 1
+        brain_mask_T2[mask_array < 1] = 0
+        for iii in range(np.shape(mask_array)[0]):
+            brain_mask_T2[iii,:,:] = scipy.ndimage.morphology.binary_fill_holes(brain_mask_T2[iii,:,:])  #fill the holes inside br
+        mask_array = brain_mask_T2
 
         # transform/project the original array to axial and coronal views
-        if orientation == 'c':
-            array = np.transpose(image_array, (1, 0, 2))
-            if data_type == 'image':
-                # this is to check the orientation of your images is right or not. Please check /images/coronal and /images/axial
-                check_orient (array, direction_1, pat_count)
-        elif orientation == 'a':
-            array = image_array  
-            if data_type == 'image': 
+        if args.orientation == 'coronal':
+            image_array = np.transpose(image_array, (1, 0, 2))
+            print(np.shape(image_array))
+            mask_array = np.transpose(mask_array, (1, 0, 2))
+            # this is to check the orientation of your images is right or not. Please check /images/coronal and /images/axial
+            check_orient (image_array, direction_1, pat_count)
+        elif args.orientation == 'axial':
+            image_array = image_array  
+            print(np.shape(image_array))
                 # this is to check the orientation of your images is right or not. Please check /images/coronal and /images/axial  
-                check_orient (array, direction_2, pat_count) 
+            check_orient (image_array, direction_2, pat_count) 
         else:
             print('--> error: undefined orientation: ', orientation)
             exit()
             
         # pre-processing, crop or pad them to a standard size given by img_shape    
-        array = pre_processing(array, per, img_shape)
+        image_array = pre_processing(image_array, per, img_shape)
+        mask_array = pre_processing(mask_array, per, img_shape)
+
 
         # array concatenation
-        dataset_con = concatenate_arrays(dataset_con, array)
+        image_con = concatenate_arrays(image_con, image_array)
+        mask_con = concatenate_arrays(mask_con, mask_array)
 
-        pat_count+=1
-
-    return dataset_con
+    return image_con, mask_con
 
 
 # image augmentation with scale, shift, rotate and shear
@@ -248,15 +251,12 @@ def get_unet(img_shape = None, first5=False):
         return model
 
 
-## data preparation and training of the model
-def prep_train(csv_logger): 
+## data preparation and training of the model with the given parameters
+def prep_train(csv_logger, args): 
     global model
     global pretrained_model
     image_list = sorted(os.listdir(train_image_path))
-    mask_list = sorted(os.listdir(train_mask_path))
-
-    image_array = preparation (train_image_path, image_list, 'train', 'image')
-    mask_array = preparation (train_mask_path, mask_list, 'train', 'mask')
+    image_array, mask_array = preparation (train_image_path, image_list)
 
     # for data augmentation:
     image_array, mask_array = image_aug(image_array, mask_array)
@@ -265,20 +265,20 @@ def prep_train(csv_logger):
     # If the model does not learn in one epoch, it is rare that it learns in following epochs. 
     # Thus, the weights are reloaded and the training starts again.
     current_epoch = 0
-    while (current_epoch < 1):
+    while (current_epoch < args.n_epochs):
         print('epoch: '+str(current_epoch))
-        history = model.fit(image_array, mask_array, batch_size = batch_size, epochs = 1, callbacks=[csv_logger]) 
+        history = model.fit(image_array, mask_array, batch_size = args.batch_size, epochs = 1, callbacks=[csv_logger]) 
         current_epoch +=1
-        if history.history['loss'][0] > 0.996: 
+        if history.history['loss'][0] > 0.998: 
             print('loss problem')
             model.load_weights(pretrained_model)
             # for training from scratch: comment the line above and uncomment the line below
             #model = get_unet(img_shape)
             current_epoch = 0  
         else: 
-            model.fit(image_array, mask_array, batch_size = batch_size, epochs = (epoch_count-1), callbacks=[csv_logger])
-
-    model.save_weights(save_model_path+orientation+'_model'+str(model_number)+'_epoch'+str(epoch_count)+'.h5')
+            model.fit(image_array, mask_array, batch_size = args.batch_size, epochs = 1, callbacks=[csv_logger])
+        if current_epoch% 4 ==0: # save the model every 4 epochs
+            model.save_weights(save_model_path+args.name_exp+'_'+args.orientation+'_model'+'_epoch'+str(args.n_epochs)+'.h5')
 
 per = 0.25
 thresh = 10
@@ -288,34 +288,37 @@ direction_2 = 'axial'
 
 model_path = 'models/'
 save_model_path = 'saved_models/'
-train_image_path = 'data/training/image/'
-train_mask_path = 'data/training/mask/'
+train_image_path = 'data/training/'
 image_path = 'images/'
 
-### hyperparameters of the model
-epoch_count = 1
 img_shape = (200, 200, 1)
-batch_size = 10          
-model_number = 3         # will be part of the file name of the saved weights
-orientation = 'a'        # 'a' for axial or 'c' for coronal models
-
-model = get_unet(img_shape)
-pretrained_model = os.path.join(model_path, 'a_model0_epoch30.h5') # change the pretrained model if you want
 
 
 ### hints to train a new model:
-# orientation is 'a' for axial or 'c' for coronal
 # change the model_number for each new model to prevet overwriting the previous one
 # you might adapt the loaded model weights for transfer learning
 
 if __name__ == '__main__':
-    # for training from scratch you can comment the next line
-    model.load_weights(pretrained_model)
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-n_exp","--name_exp", type=str, default='initial', help="define the name of your experimetn")
+    parser.add_argument("-b","--batch_size", type=int, default=10, help="define the batch size")
+    parser.add_argument("-n","--n_epochs", type=int, default=5, help="define the number of epochs")
+    parser.add_argument("-o","--orientation", type=str, help="axial or coronal, the orientation property of the sub-network")
+    args = parser.parse_args()
+    
+    if args.orientation != 'axial' or args.orientation != 'coronal':
+        assert("wrong input for the orientation.")
+
+    model = get_unet(img_shape)
+    pretrained_model = os.path.join(model_path, 'axial_0.h5') # change the pretrained model if you want
+    # load pre-trained models available. For training from scratch you can comment the next line
+    model.load_weights(pretrained_model)
+    
     ## to save the training loss in a csv file
     logger_name = os.path.join('scores/'+'model'+str(model_number)+'_log.csv')
     csv_logger = CSVLogger(logger_name, append=True, separator=',')
 
     model.summary()
 
-    prep_train(csv_logger)
+    prep_train(csv_logger, args)
