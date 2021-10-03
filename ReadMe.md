@@ -8,7 +8,7 @@
 <br />
 
 We provide two kinds of **pre-trained** models for automated segmentation of human and neonate claustrum in T1-w and T2-w images respectively.
- one  trained on 200 T1-w scans to directly perform inference for your new datasets.  <br /> 
+One is trained on 200 T1-w scans of our in-house data while the other one is trained on only 20 T-2 scans and yield comparable performance with the previous model. You could directly perform inference for your new datasets.  <br /> 
 Here is a [simple demo](https://drive.google.com/file/d/1b0XS8LjRM-rZMPOL8qM6voG-A5jcdUgK/view?usp=sharing) to test on new T1-w scans. We use a public dataset from [ABIDE](http://fcon_1000.projects.nitrc.org/indi/abide/). Basically the codes take 3D T1-w scans as the input and give you a 3D segmentation mask. The demo can run without GPUs and it takes around 90 seconds for one scan with CPU computation.  The detailed instructions are in **ReadMe** inside. Please have a look at it. <br /> 
 <br />
 There are several **necessary** pre-processing steps you will need to follow before you feed your data to our pre-trained model: <br /> <br />
