@@ -114,7 +114,8 @@ def combined_prediction(coronal_array, ori_size_c, orient_c, axial_array, ori_si
 def predict_label(pat, pat_count):
     #read data
     pat_file_name = os.path.join(data_path, pat)
-    image_array = sitk.GetArrayFromImage(sitk.ReadImage(pat_file_name))
+    ref_image = sitk.ReadImage(pat_file_name)
+    image_array = sitk.GetArrayFromImage(ref_image)
     
     # z-score normalization
     brain_mask_T1 = np.zeros(np.shape(image_array), dtype = 'float32')
@@ -155,7 +156,9 @@ def predict_label(pat, pat_count):
     #save the masks
     filename_resultImage = os.path.join(result_path, pat)
     filename_resultImage = filename_resultImage.replace('.nii.gz','_pred_mask.nii.gz') # adapt this line if you don't use '.nii.gz' as file format
-    sitk.WriteImage(sitk.GetImageFromArray(pred), filename_resultImage ) 
+    sitk_image = sitk.GetImageFromArray(pred)
+    sitk_image.CopyInformation(ref_image)
+    sitk.WriteImage(sitk_image, filename_resultImage)
     
 direction_1 = 'coronal'
 direction_2 = 'axial'
