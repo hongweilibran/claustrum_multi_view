@@ -201,7 +201,8 @@ pat_list = os.listdir(data_path)
 for pat in pat_list:
     #read data
     pat_file_name = os.path.join(data_path, pat, pat+'_T1w_denoised.nii')
-    image_array = sitk.GetArrayFromImage(sitk.ReadImage(pat_file_name))
+    ref_image = sitk.ReadImage(pat_file_name)
+    image_array = sitk.GetArrayFromImage(ref_image)
     
     if not os.path.exists(os.path.join(result_path, pat)):
         os.mkdir(os.path.join(result_path, pat))
@@ -275,7 +276,9 @@ for pat in pat_list:
     pred[pred <= 0.40] = 0.
     
     #save the masks
+    sitk_image = sitk.GetImageFromArray(pred)
+    sitk_image.CopyInformation(ref_image)
     filename_resultImage = os.path.join(result_path, pat, 'pred_mask.nii.gz')
-    sitk.WriteImage(sitk.GetImageFromArray(pred), filename_resultImage )
+    sitk.WriteImage(sitk_image, filename_resultImage )
 
 
