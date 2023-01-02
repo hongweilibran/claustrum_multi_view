@@ -190,7 +190,7 @@ img_shape = (180, 180, 1)
 model = get_unet(img_shape)
 model_path = 'models/'
 result_path = 'output/'
-data_path = 'data/'
+data_path = 'data/test/'
 image_path = 'images'
 
 if not os.path.exists(result_path):
@@ -200,7 +200,7 @@ pat_list = os.listdir(data_path)
 
 for pat in pat_list:
     #read data
-    pat_file_name = os.path.join(data_path, pat, pat+'_T1w_denoised.nii')
+    pat_file_name = os.path.join(data_path, pat, pat+'_sMRI_denoised.nii.gz')
     ref_image = sitk.ReadImage(pat_file_name)
     image_array = sitk.GetArrayFromImage(ref_image)
     
