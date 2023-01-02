@@ -1,4 +1,4 @@
-data/test/image
+data/test
 
 In this folder, you can store your MRI scans for segmentation using a pre-trained model. You can use your own scans or feel free to register for the developing Human Connectome Project (http://www.developingconnectome.org/data-release/second-data-release/information-registration-and-download/) to request data.
 

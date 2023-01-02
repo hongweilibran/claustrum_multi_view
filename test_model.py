@@ -165,7 +165,7 @@ direction_2 = 'axial'
 
 result_path = 'output/'
 image_path = 'images/'
-data_path = 'data/test/image/'
+data_path = 'data/test/'
 pat_list = sorted(os.listdir(data_path))
 
 
