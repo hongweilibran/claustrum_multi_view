@@ -7,7 +7,7 @@ We provide two kinds of **pre-trained** models for automated segmentation of hum
 The adult model is trained on 181 T1-w scans of our in-house data while the neonatal one is trained on only 20 T2-w scans of the Developing Human Connectome Project ([DHCP](http://www.developingconnectome.org/)) with transfer learning from the adult model and yield comparable performance. You could directly perform inference for your new datasets.<br/><br/>
 
 ### Adult MRI
-Here is a [simple demo](https://drive.google.com/file/d/1b0XS8LjRM-rZMPOL8qM6voG-A5jcdUgK/view?usp=sharing) to test on new T1-w scans. We use a public dataset from [ABIDE](http://fcon_1000.projects.nitrc.org/indi/abide/). Basically, the codes take 3D T1-w scans as the input and give you a 3D segmentation mask. The demo can run without GPUs and it takes around 90 seconds for one scan with CPU computation. The detailed instructions are in **ReadMe** inside. Please have a look at it.<br/>
+Here is a [simple demo](https://drive.google.com/file/d/1IT7sgsxvgkCbJfT65_0bCZW78K53r7id/view?usp=sharing) to test on new T1-w scans. We use a public dataset from [ABIDE](http://fcon_1000.projects.nitrc.org/indi/abide/). Basically, the codes take 3D T1-w scans as the input and give you a 3D segmentation mask. The demo can run without GPUs and it takes around 90 seconds for one scan with CPU computation. The detailed instructions are in **ReadMe** inside. Please have a look at it.<br/>
 There are several **necessary** pre-processing steps you will need to follow before you feed your data to our pre-trained model:<br/>
 
 a) **Resampling** the MR scans to 1 mm³; This is because we trained the model on this kind of resolution. We provide the python codes for resampling in the repository.<br/>
